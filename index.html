@@ -194,7 +194,7 @@ dd small{display:block;color:var(--muted);font-size:12.5px;font-variant-numeric:
           <div class="item"><dt>餐邊櫃</dt><dd>面頭放 Philips ADD6920 水機同酒杯托盤，右邊開放酒架放 7 支酒，其餘係坑紋門櫃<small>水機約 23 × 37.4 × 42.7 cm · 背後預留插蘇</small></dd></div>
           <div class="item"><dt>玄關</dt><dd>頂天玄關櫃收鞋、吸塵機、行李箱，吸塵機同喼嗰兩格落地</dd></div>
           <div class="item"><dt>走廊</dt><dd>由客廳西邊入，沿路有其餘兩間房同浴室門，最尾右手邊係睡房<small>闊約 1 米</small></dd></div>
-          <div class="item"><dt>妹妹房</dt><dd>3呎升高收納床（床底兩個大抽屜）、舊 iMac 書枱連桌面鏡櫃、趟門衣櫃、床尾開放書架<small>約 2.5 × 2.1 米 · 全屋第二大房</small></dd></div>
+          <div class="item"><dt>妹妹房</dt><dd>跟妹妹嘅參考圖做：東牆一幅頂天櫃，由床尾起係橡木開放層、拱形掛鈎位（掛衫同袋）、坑紋玻璃拱門衣櫃連三格抽屜、拱形門衣櫃、橡木開放層；書枱轉橡木圓角枱面，牆身加線框同天花暖光燈槽，配白色 boucle 橡木圈背凳。3呎升高收納床同 iMac、桌面鏡櫃保留<small>約 2.5 × 2.1 米 · 全屋第二大房</small></dd></div>
           <div class="item"><dt>弟弟房</dt><dd>照用原有海馬升高收納床同 IKEA RAKKESTAD 兩門衣櫃，加一張摺牆枱放 laptop<small>約 1.9 × 2.35 米</small></dd></div>
           <div class="item"><dt>睡房</dt><dd>3呎半床配圓頂軟包床頭、伸縮化妝鏡加雙屏電腦枱、2.1 米衣櫃<small>約 2.1 × 3.3 米</small></dd></div>
         </dl>
@@ -984,9 +984,9 @@ artOn(sW,'z',.32,.4,SB.cz,1.72,4);
 // desk on the south wall: old 27" iMac + tabletop cabinet with the mirror inside its door
 const SD={x0:-1.7,x1:-.68,z0:.45,z1:SR.Z1,top:.74};
 {const cx=(SD.x0+SD.x1)/2,cz=(SD.z0+SD.z1)/2;
- rbox(SD.x1-SD.x0,.03,SD.z1-SD.z0,.01,mats.oak,cx,SD.top-.015,cz);
+ {const tp=rbox(SD.x1-SD.x0,SD.z1-SD.z0,.03,.12,mats.oak,cx,SD.top-.015,cz);tp.rotation.x=-Math.PI/2;}
  [[SD.x0+.04,SD.z0+.04],[SD.x1-.04,SD.z0+.04],[SD.x0+.04,SD.z1-.04],[SD.x1-.04,SD.z1-.04]].forEach(([x,z])=>cyl(.018,.015,SD.top-.03,mats.oak,x,(SD.top-.03)/2,z));
- box(.46,.08,.5,mats.white,SD.x0+.27,SD.top-.07,cz+.02);box(.16,.012,.012,mats.oak,SD.x0+.27,SD.top-.07,SD.z0+.03);
+ box(.46,.08,.5,mats.oak,SD.x0+.27,SD.top-.07,cz+.02);ball(.012,mats.brass,SD.x0+.27,SD.top-.07,SD.z0+.065);
  // iMac 27"
  const ix=-1.005,iz=.86,iy=SD.top;
  box(.22,.006,.2,mats.silver,ix,iy+.003,iz+.04);const st=box(.2,.3,.008,mats.silver,ix,iy+.15,iz+.1);st.rotation.x=.18;
@@ -1005,37 +1005,65 @@ const SD={x0:-1.7,x1:-.68,z0:.45,z1:SR.Z1,top:.74};
  box(kx1-kx0,ky1-ky0,.014,mats.oak,(kx1-kx0)/2,(ky0+ky1)/2,0,dg);box(.012,.1,.016,mats.brass,kx1-kx0-.025,(ky0+ky1)/2,-.012,dg);
  const mm=new THREE.Mesh(new THREE.PlaneGeometry(kx1-kx0-.04,ky1-ky0-.04),M('#D3DCDF',{roughness:.08,metalness:.7}));mm.position.set((kx1-kx0)/2,(ky0+ky1)/2,.008);dg.add(mm);
  sisStore.push({g:dg,axis:'door',max:1.85});
- // floating shelf with LED above the desk
- const d=sS.decor;box(.86,.03,.22,mats.oak,cx+.05,1.78,SR.Z1-.11,d);box(.8,.006,.02,warmLed,cx+.05,1.76,SR.Z1-.2,d);
- [['#E8CFC4',.2],['#A6B19E',.18],['#E7DDCD',.21]].forEach(([c,h],i)=>box(.15,h,.035,M(c,{roughness:.9}),cx-.25+i*.04,1.795+h/2,SR.Z1-.11,d));
- cyl(.06,.05,.1,M('#F4F0E8',{roughness:.6}),cx+.3,1.845,SR.Z1-.11,d);
- for(let i=0;i<14;i++){const t=i/13,l=ball(1,mats.leaf,cx+.3+Math.sin(i*1.9)*.05,1.9-t*.4,SR.Z1-.16+Math.cos(i*1.3)*.03,d);l.scale.set(.03,.025,.012);l.rotation.set(Math.random(),Math.random()*3,0);}}
-chair(-1.16,.12,Math.PI);
+ // framed wall panel above the desk and a warm cove light along the ceiling (as in the reference)
+ const d=sS.decor,pm=M('#F7F2EA',{roughness:.6});box(.92,.022,.012,pm,cx+.03,2.22,SR.Z1-.008,d);box(.92,.022,.012,pm,cx+.03,1.32,SR.Z1-.008,d);[cx-.43,cx+.49].forEach(x=>box(.022,.92,.012,pm,x,1.77,SR.Z1-.008,d));
+ [[SR.Z1-.06,sS],[SR.Z0+.06,sN]].forEach(([z,wo])=>{box(SR.X1-SR.X0-.6,.05,.06,M('#F5F0E7',{roughness:.5}),(SR.X0+SR.X1-.55)/2,2.44,z,wo.decor);box(SR.X1-SR.X0-.62,.006,.015,warmLed,(SR.X0+SR.X1-.55)/2,2.472,z,wo.decor);});}
+// stool: white boucle seat with an oak loop back
+{const g=new THREE.Group();g.position.set(-1.16,0,.14);scene.add(g);
+ cyl(.19,.18,.1,M('#F4F1EA',{roughness:1}),0,.46,0,g,32);
+ [0,1,2,3].forEach(i=>{const a=i*Math.PI/2+Math.PI/4;cyl(.014,.012,.41,mats.oak,Math.cos(a)*.12,.205,Math.sin(a)*.12,g);});
+ add(new THREE.TorusGeometry(.15,.022,10,28,Math.PI),mats.oak,0,.56,-.17,g);[-.15,.15].forEach(x=>cyl(.02,.02,.14,mats.oak,x,.49,-.17,g));}
 
-// wardrobe (sliding doors) at the east wall, open bookshelf above the bed foot
-const SWX0=SR.X1-.55,SWZ0=-.1,SWZ1=SR.Z1;
-{const w=new THREE.Group();scene.add(w);const inX=(SWX0+.01+SR.X1)/2,inD=.53,L=SWZ1-SWZ0,cz=(SWZ0+SWZ1)/2,mid=.5;
- box(.02,H,L,mats.inner,SR.X1-.01,H/2,cz,w);[SWZ0+.01,mid,SWZ1-.01].forEach(z=>box(inD,H,.02,mats.white,inX,H/2,z,w));
- box(inD,.08,L,mats.shadowgap,inX+.02,.04,cz,w);box(inD,.02,L,mats.inner,inX,.09,cz,w);box(.56,.03,L,mats.white,SWX0+.28,H-.015,cz,w);box(inD,.02,L-.02,mats.inner,inX,2.0,cz,w);
- const rodM=M('#C8AE84',{metalness:.6,roughness:.35});const cl=['#E8CFC4','#F2ECE2','#A6B19E','#D9D4CB','#C9B79C','#8E9BA6','#EDE9E0'];
- [[1.9,.6,.72],[1.06,.45,.55]].forEach(([yr,h0,h1])=>{const r=cyl(.012,.012,mid-SWZ0-.04,rodM,inX,yr,(SWZ0+mid)/2,w);r.rotation.x=Math.PI/2;
-   for(let z=SWZ0+.05,i=0;z<mid-.03;z+=.058,i++){const h=h0+Math.random()*(h1-h0);box(.4,h,.022,M(cl[(i*3+Math.round(yr*10))%cl.length],{roughness:1}),inX-.02,yr-.03-h/2,z,w);}});
- const r2=(mid+SWZ1)/2;[.5,.85,1.25,1.6].forEach((y,k)=>{box(inD,.02,SWZ1-mid-.03,mats.inner,inX,y,r2,w);if(k)[-.13,.13].forEach((dz,i)=>{for(let j=0;j<2+((i+k)%2);j++)box(.3,.06,.18,M(cl[(i+j+k*2)%cl.length],{roughness:1}),inX-.03,y+.04+j*.06,r2+dz,w);});});
- [.12,.31].forEach(y=>{box(.02,.17,SWZ1-mid-.05,mats.white,SWX0+.04,y+.085,r2,w);box(.016,.012,.12,mats.oak,SWX0+.028,y+.13,r2,w);});
- [[-.12],[.12]].forEach(([dz])=>box(.32,.22,.22,M('#E7DDCD',{roughness:1}),inX,2.13,cz+dz*3,w));
- // two sliding panels: outer one slides over the inner one when opened
- const pw=L/2+.02;
- const pA=new THREE.Group();scene.add(pA);rbox(.02,H-.1,pw,.004,mats.white,SWX0-.012,(H-.1)/2+.06,SWZ0+pw/2,pA);box(.014,.6,.02,mats.oak,SWX0-.024,1.05,SWZ0+pw-.03,pA);
- const pB=new THREE.Group();scene.add(pB);rbox(.02,H-.1,pw,.004,mats.white,SWX0+.012,(H-.1)/2+.06,SWZ1-pw/2,pB);box(.014,.6,.02,mats.oak,SWX0,1.05,SWZ1-pw+.03,pB);
- box(.04,.03,L,M('#E9E1D4'),SWX0,H-.04,cz,w);
- sisStore.push({g:pA,axis:'z',dist:L/2-.04});}
-{const b=new THREE.Group();scene.add(b);const bx0=SR.X1-.35,cz=(SR.Z0+SWZ0)/2,L=SWZ0-SR.Z0;
- box(.34,.72,L,mats.white,bx0+.17,.36,cz,b);
- box(.02,H-.72,L,mats.oak,SR.X1-.01,(H+.72)/2,cz,b);[SR.Z0+.01,SWZ0-.01].forEach(z=>box(.34,H-.72,.02,mats.oak,bx0+.17,(H+.72)/2,z,b));
- [.74,1.1,1.46,1.82,2.18].forEach((y,k)=>{box(.34,.022,L-.02,mats.oak,bx0+.17,y,cz,b);
-   if(k<4){const n=5+k%2;for(let i=0;i<n;i++){const h=.2+((i+k)%3)*.03;const bk=box(.18,h,.035,M(['#E8CFC4','#A6B19E','#E7DDCD','#F2ECE2','#C9B79C'][(i+k)%5],{roughness:.9}),bx0+.16,y+.011+h/2,SR.Z0+.08+i*.04,b);if(i===n-1)bk.rotation.x=.25;}
-     if(k%2===0){cyl(.05,.045,.1,M('#F4F0E8',{roughness:.6}),bx0+.17,y+.06,SWZ0-.18,b);for(let i=0;i<8;i++){const a=i*.8,l=ball(1,mats.leaf,bx0+.17+Math.cos(a)*.04,y+.14+Math.random()*.05,SWZ0-.18+Math.sin(a)*.04,b);l.scale.set(.025,.04,.03);}}
-     else{box(.02,.18,.14,mats.oak,bx0+.2,y+.1,SWZ0-.2,b);box(.005,.14,.1,M('#F4F1EA'),bx0+.189,y+.1,SWZ0-.2,b);}}});}
+// built-in east wall after the reference photo: oak open column | arched hook niche (clothes / bags) | fluted-glass arched door + 3 drawers | arched door | oak open column
+{const EW=SR.X1,D=.55,FXw=EW-D,cx=EW-D/2,w=new THREE.Group();scene.add(w);
+ const cream=M('#F5F0E7',{roughness:.5}),oak=mats.oak,sg=(z0,z1)=>({z0,z1,c:(z0+z1)/2,L:z1-z0});
+ const S1=sg(SR.Z0,-.62),S2=sg(-.62,-.1),S3=sg(-.1,.3),S4=sg(.3,.7),S5=sg(.7,SR.Z1);
+ box(.02,H,SR.Z1-SR.Z0,mats.inner,EW-.01,H/2,0,w);
+ [SR.Z0+.01,S1.z1,S2.z1,S4.z1,SR.Z1-.01].forEach(z=>box(D,H,.02,cream,cx,H/2,z,w));
+ box(D+.02,.03,SR.Z1-SR.Z0,cream,cx,H-.015,0,w);
+ const archShape=(L,v0,v1,r)=>{const s=new THREE.Shape();s.moveTo(-L/2,v0);s.lineTo(L/2,v0);s.lineTo(L/2,v1-r);s.absarc(0,v1-r,r,0,Math.PI,false);s.lineTo(-L/2,v0);return s;};
+ const facing=(mesh,x,z)=>{mesh.rotation.y=-Math.PI/2;mesh.position.set(x,0,z);return mesh;};
+ // oak open columns (books, skincare, plants) with LED under each shelf
+ const column=(S,low)=>{box(.012,H-low,S.L-.04,oak,EW-.026,(H+low)/2,S.c,w);box(D-.02,low,S.L-.03,oak,cx,low/2,S.c,w);
+   [low+.02,low+.37,low+.72,low+1.07].forEach((y,k)=>{if(y>H-.3)return;box(D-.03,.024,S.L-.04,oak,cx+.005,y,S.c,w);box(.01,.006,S.L-.08,warmLed,FXw+.06,y-.016,S.c,w);
+     const it=k%3;if(it===0){[0,1,2,3].forEach(i=>{const h=.2+((i+k)%3)*.03;box(.17,h,.032,M(['#E8CFC4','#A6B19E','#E7DDCD','#F2ECE2'][i],{roughness:.9}),cx+.04,y+.012+h/2,S.c-S.L/2+.07+i*.036,w);});}
+     else if(it===1){cyl(.05,.045,.1,M('#F4F0E8',{roughness:.6}),cx,y+.062,S.c,w);for(let i=0;i<8;i++){const a=i*.8,l=ball(1,mats.leaf,cx+Math.cos(a)*.04,y+.14+Math.random()*.05,S.c+Math.sin(a)*.04,w);l.scale.set(.025,.04,.03);}}
+     else{[-.08,0,.08].forEach((dz,i)=>cyl(.022,.022,.08+i*.03,M(['#E9E4DA','#E8CFC4','#C9D3CF'][i],{roughness:.3}),cx-.05,y+.052+i*.015,S.c+dz*S.L/.4,w));}});};
+ column(S1,.72);column(S5,.74);
+ // arched open niche with brass hooks for clothes and bags, rounded oak cabinet below
+ rbox(D-.05,.73,S2.L-.05,.1,oak,cx+.01,.365,S2.c,w);box(D-.02,.025,S2.L-.03,oak,cx,.745,S2.c,w);
+ box(.01,1.4,S2.L-.04,M('#F8F3EB',{roughness:.6}),EW-.026,1.46,S2.c,w);
+ {const fr=new THREE.Shape(),fl=(S2.L-.02)/2;fr.moveTo(-fl,.758);fr.lineTo(fl,.758);fr.lineTo(fl,2.16);fr.lineTo(-fl,2.16);fr.lineTo(-fl,.758);const h=archShape(S2.L-.09,.775,2.12,(S2.L-.09)/2);fr.holes.push(h);
+  w.add(facing(new THREE.Mesh(new THREE.ExtrudeGeometry(fr,{depth:.02,bevelEnabled:false,curveSegments:24}),cream),FXw,S2.c));}
+ box(D-.06,.022,S2.L-.1,oak,cx+.01,1.86,S2.c,w);box(.01,.006,S2.L-.12,warmLed,FXw+.08,1.845,S2.c,w);box(.01,.006,.2,warmLed,EW-.05,2.02,S2.c,w);
+ cyl(.025,.03,.08,M('#F4F0E8',{roughness:.5}),cx+.05,1.912,S2.c+.1,w);
+ const hr=cyl(.008,.008,S2.L-.12,mats.brass,EW-.04,1.58,S2.c,w,10);hr.rotation.x=Math.PI/2;
+ [-.15,-.05,.05,.15].forEach(dz=>{const hk=cyl(.006,.006,.07,mats.brass,EW-.07,1.565,S2.c+dz,w,8);hk.rotation.z=1.1;});
+ rbox(.08,.34,.3,.03,M('#D8CCB6',{roughness:1}),EW-.1,1.3,S2.c-.1,w);add(new THREE.TorusGeometry(.1,.008,6,16,Math.PI),M('#B8A88C'),EW-.09,1.47,S2.c-.1,w).rotation.y=Math.PI/2;
+ rbox(.06,.62,.34,.04,M('#A6B19E',{roughness:1}),EW-.12,1.22,S2.c+.08,w);
+ rbox(.05,.16,.2,.03,M('#2F3437',{roughness:.6}),EW-.15,1.18,S2.c+.18,w);
+ // top cabinets over niche and wardrobe
+ [S2,S3,S4].forEach(S=>rbox(.02,.36,S.L-.01,.004,cream,FXw-.01,2.35,S.c,w));
+ // wardrobe interior: dresses behind the glass, double hanging behind the arched door
+ const rodM=M('#C8AE84',{metalness:.6,roughness:.35}),cl=['#E8CFC4','#F2ECE2','#A6B19E','#D9D4CB','#C9B79C','#8E9BA6','#EDE9E0'];
+ const hang=(S,yr,h0,h1)=>{const r=cyl(.012,.012,S.L-.04,rodM,cx,yr,S.c,w);r.rotation.x=Math.PI/2;for(let z=S.z0+.05,i=0;z<S.z1-.03;z+=.055,i++){const h=h0+Math.random()*(h1-h0);box(.4,h,.022,M(cl[(i*3+Math.round(yr*10))%cl.length],{roughness:1}),cx-.02,yr-.03-h/2,z,w);}};
+ box(D-.02,.02,S3.L-.02,mats.inner,cx,.77,S3.c,w);box(D-.02,.02,S3.L+S4.L-.02,mats.inner,cx,2.15,(S3.z0+S4.z1)/2,w);
+ hang(S3,1.98,.8,1.0);hang(S4,1.98,.62,.72);hang(S4,1.05,.45,.56);
+ // three drawers under the glass door (slide out when the room storage is opened)
+ const drw3=new THREE.Group();scene.add(drw3);
+ [[.1,.32],[.33,.545],[.555,.765]].forEach(([y0,y1])=>{rbox(.02,y1-y0-.008,S3.L-.012,.004,cream,FXw-.01,(y0+y1)/2,S3.c,drw3);ball(.013,mats.brass,FXw-.026,(y0+y1)/2,S3.c,drw3);box(D-.08,.012,S3.L-.06,mats.inner,cx+.02,y0+.02,S3.c,drw3);});
+ sisStore.push({g:drw3,axis:'x',dist:-.3});
+ // fluted-glass arched door (amber reeded glass)
+ const reed=(()=>{const [c,g]=cnv(128,256);g.fillStyle='#D9B98A';g.fillRect(0,0,128,256);for(let x=0;x<128;x+=8){const gr=g.createLinearGradient(x,0,x+8,0);gr.addColorStop(0,'rgba(255,240,215,.55)');gr.addColorStop(.5,'rgba(160,120,70,.15)');gr.addColorStop(1,'rgba(255,240,215,.45)');g.fillStyle=gr;g.fillRect(x,0,8,256);}return tex(c,2,1);})();
+ const doorArch=(S,y0,y1,glass)=>{const pv=new THREE.Group();pv.position.set(FXw-.012,0,S.z0+.005);scene.add(pv);const L=S.L-.012;
+   rbox(.022,y1-y0,L,.004,cream,0,(y0+y1)/2,L/2,pv);
+   const r=(L-.1)/2,sh=archShape(L-.1,y0+.08,y1-.06,r);
+   const m=new THREE.Mesh(new THREE.ShapeGeometry(sh,24),glass?new THREE.MeshStandardMaterial({map:reed,color:C('#FFFFFF'),roughness:.25,transparent:true,opacity:.85}):M('#F9F5EE',{roughness:.45}));
+   m.rotation.y=-Math.PI/2;m.position.set(-.013,0,L/2);pv.add(m);
+   if(!glass){const fr=archShape(L-.08,y0+.07,y1-.05,(L-.08)/2),hole=archShape(L-.1,y0+.08,y1-.06,(L-.1)/2);fr.holes.push(hole);const fm=new THREE.Mesh(new THREE.ExtrudeGeometry(fr,{depth:.006,bevelEnabled:false,curveSegments:24}),M('#EFE8DC',{roughness:.5}));fm.rotation.y=-Math.PI/2;fm.position.set(-.011,0,L/2);pv.add(fm);}
+   ball(.014,mats.brass,-.022,glass?1.2:1.1,L-.04,pv);sisStore.push({g:pv,axis:'door',max:-1.6});};
+ doorArch(S3,.78,2.13,true);doorArch(S4,.1,2.13,false);}
+
 // round rug, ceiling lamp
 {const r=new THREE.Mesh(new THREE.CylinderGeometry(.55,.55,.008,48),M('#ECE4D7',{roughness:1}));r.position.set(-1.6,.004,.2);r.receiveShadow=true;scene.add(r);}
 const sLampMat=new THREE.MeshStandardMaterial({color:C('#FBFAF7'),emissive:C('#FFE6C4'),emissiveIntensity:0,roughness:.6});
@@ -1050,7 +1078,7 @@ const sL=new THREE.PointLight(C('#FFD7A6'),0,5,2);sL.position.set(-1.35,H-.2,0);
 const sLb=new THREE.PointLight(C('#FFD39A'),0,2,2);sLb.position.set(-2.38,.75,.08);scene.add(sLb);
 function sisNight(on){sL.intensity=on?1.0:0;sLb.intensity=on?.6:0;sLampMat.emissiveIntensity=on?1.2:0;sBulb.emissiveIntensity=on?2:0;}
 let sisOpen=0,sisTarget=0;
-function applySis(t){sisStore.forEach(o=>{if(o.axis==='z')o.g.position.z=o.dist*t;else o.g.rotation.y=o.max*t;});}
+function applySis(t){sisStore.forEach(o=>{if(o.axis==='z')o.g.position.z=o.dist*t;else if(o.axis==='x')o.g.position.x=o.dist*t;else o.g.rotation.y=o.max*t;});}
 
 /* ================= brother's room (third bedroom, x −6.05 … −4.15, z 1.25 … 3.6) =================
    window on the west wall, door at the north end of the east wall (end of the corridor), hinged on the north side.
@@ -1418,8 +1446,8 @@ setNight(false);
 const tags=[
   ['窗',[1.3,2.15,.03],'arch',0],['梳化',[SX,.95,.5],'',0],['75" 電視',[SX,1.85,3.3],'',0],['電視櫃',[SX-.6,.6,2.95],'',0],['茶几',[SX,.55,1.33],'',0],
   ['餐枱',[DX,.95,DZ],'',0],['餐邊櫃',[5.84,1.15,2.4],'',0],['玄關櫃',[cMid,2.62,FZ],'',0],['大門',[6.0,2.2,3.95],'arch',0],['廚房',[2.93,2.2,3.8],'arch',0],['雪櫃 70cm',[2.45,2.0,4.2],'',0],['窗下星盆 · Quooker + CUBE',[.35,1.3,3.82],'',0],['洗衣機',[S0+.3,.62,4.19],'',0],['微波爐',[.3,1.66,4.45],'',0],['氣炸鍋',[.3,1.22,4.41],'',0],['爐頭',[.95,1.0,4.5],'',0],['頭頂櫃（可拉落）',[1.65,2.1,4.44],'',0],['滑動電槽',[.3,1.22,4.76],'',0],['水機 ADD6920',[5.7,1.28,1.9],'',0],['酒架',[5.62,.75,2.98],'',0],['走廊',[-1.2,2.2,1.65],'arch',0],['弟弟房 · 原有海馬床',[BB.cx,.95,BB.cz],'',0],['原有 IKEA 衣櫃',[RK.cx,2.2,RK.z0],'',0],['摺枱 + laptop',[BR.X1-.2,1.05,BD.cz],'',0],
-  ['妹妹房 · 升高收納床',[SB.cx,.95,SB.cz],'',0],['衣櫃（趟門）',[SR.X1-.28,2.25,.47],'',0],['開放書架',[SR.X1-.18,2.42,-.6],'',0],['舊 iMac',[-1.005,1.36,.86],'',0],['鏡櫃',[-1.515,1.3,.95],'',0],
-  ['床底大抽屜',[SB.x0+.48,.5,SB.z1+.45],'in',3],['掛衫',[SR.X1-.62,1.62,.2],'in',3],['摺衫・抽屜',[SR.X1-.62,.95,.78],'in',3],['鏡櫃門內鏡',[-1.78,1.32,.68],'in',3],['大廁所',[-3.3,1.05,2.95],'',0],['Washlet',[-3.0,.78,3.25],'',0],['落地面盆櫃 · 清潔劑',vA.cabTag,'',0],['開放層：lotion · 漱口水 · 護膚品',vA.shelfTag,'',0],['抽拉式潔面巾',vA.towelTag,'',0],['M巾（鏡門內）',vA.mirrorTag,'',0],
+  ['妹妹房 · 升高收納床',[SB.cx,.95,SB.cz],'',0],['弧形門衣櫃 · 坑紋玻璃門 + 抽屜',[SR.X1-.3,2.25,.3],'',0],['拱形掛鈎位（衫／袋）',[SR.X1-.3,1.75,-.36],'',0],['橡木開放層',[SR.X1-.28,2.3,-.84],'',0],['橡木開放層',[SR.X1-.28,2.3,.88],'',0],['舊 iMac',[-1.005,1.36,.86],'',0],['鏡櫃',[-1.515,1.3,.95],'',0],
+  ['床底大抽屜',[SB.x0+.48,.5,SB.z1+.45],'in',3],['掛衫',[SR.X1-.75,1.62,.4],'in',3],['抽屜',[SR.X1-.75,.6,.1],'in',3],['鏡櫃門內鏡',[-1.78,1.32,.68],'in',3],['大廁所',[-3.3,1.05,2.95],'',0],['Washlet',[-3.0,.78,3.25],'',0],['落地面盆櫃 · 清潔劑',vA.cabTag,'',0],['開放層：lotion · 漱口水 · 護膚品',vA.shelfTag,'',0],['抽拉式潔面巾',vA.towelTag,'',0],['M巾（鏡門內）',vA.mirrorTag,'',0],
   ['企缸（全玻璃）',[-2.0,.6,3.0],'',0],['花灑（同廁所同一面牆）',[-1.97,1.5,3.55],'',0],['晾內衣杆 + 浴室寶（企缸內）',[-2.0,2.12,2.46],'',0],
   ['細廁所 · 洗手盤 + 廁所',[-.85,1.05,2.9],'',0],['Washlet',[-1.0,.78,3.25],'',0],['鏡櫃 · 潔面巾',vB.shelfTag,'',0],
   ['吸塵機（櫃內充電）',[(U1[0]+U1[1])/2,1.3,FZ],'in',1],['28" 喼',[(U2[0]+U2[1])/2,.65,FZ],'in',1],['20" 喼',[(U2[0]+U2[1])/2,1.3,FZ],'in',1],
